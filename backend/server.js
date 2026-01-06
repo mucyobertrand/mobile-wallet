@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import { sql } from './config/db.js';
 import job from './config/cron.js';
+import cors from 'cors';
 
 
 dotenv.config();
@@ -10,6 +11,7 @@ const PORT = process.env.PORT || 3000;
 
 if (process.env.NODE_ENV === 'production') job.start();
 
+app.use(cors());
 app.use(express.json());
 async function initDB(){
     try {
@@ -107,7 +109,7 @@ app.get('/api/transactions/summary/:userId', async (req, res) => {
         res.json({
             balance: balanceResult[0].balance,
             income: incomeResult[0].income,
-            expense: expensesResult[0].expense
+            expenses: expensesResult[0].expense
         });
     } catch (error) {
         console.error("Error fetching summary:", error);
